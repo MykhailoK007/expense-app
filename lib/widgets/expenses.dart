@@ -22,6 +22,8 @@ class _ExpensesState extends State<Expenses> {
   void _openAddExpenseOverlay() {
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
       constraints: BoxConstraints(minWidth: double.infinity),
       builder: (ctx) => NewExpenses(onAddExpense: _addExpense),
     );
@@ -58,11 +60,21 @@ class _ExpensesState extends State<Expenses> {
 
   @override
   Widget build(BuildContext context) {
+    final deviceWidth = MediaQuery.of(context).size.width;
+
     Widget mainContent = const Center(child: Text('No expense found.'));
     if (expenses.isNotEmpty) {
       mainContent =
           ExpensesList(expenses: expenses, onRemoveExpense: _removeExpense);
     }
+    List<Widget> expenseContent = [
+      Expanded(
+        child: Chart(
+          expenses: expenses,
+        ),
+      ),
+      Expanded(child: mainContent)
+    ];
     return Scaffold(
         appBar: AppBar(
           title: const Text("Expense Tracker"),
@@ -73,13 +85,16 @@ class _ExpensesState extends State<Expenses> {
             ),
           ],
         ),
-        body: Column(
-          children: [
-            Chart(
-              expenses: expenses,
-            ),
-            Expanded(child: mainContent)
-          ],
-        ));
+        body: deviceWidth < 600
+            ? Column(
+                children: expenseContent,
+              )
+            : Padding(
+                padding: const EdgeInsets.only(right: 50),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: expenseContent,
+                ),
+              ));
   }
 }

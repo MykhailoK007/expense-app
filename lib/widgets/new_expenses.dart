@@ -72,92 +72,95 @@ class _NewExpenses extends State<NewExpenses> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 30, 16, 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            'New expense',
-            style: TextStyle(fontSize: 20),
-          ),
-          TextField(
-            controller: _titleController,
-            maxLength: 50,
-            decoration: InputDecoration(label: Text('Title')),
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _amountController,
-                  keyboardType: TextInputType.number,
-                  decoration:
-                      InputDecoration(label: Text('Amount'), prefixText: '\$'),
-                ),
-              ),
-              SizedBox(
-                width: 16,
-              ),
-              Row(
-                children: [
-                  Text(_selectedDate == null
-                      ? "No Selected date"
-                      : formatter.format(_selectedDate!)),
-                  IconButton(
-                      onPressed: _presentDatePicker,
-                      icon: Icon(Icons.date_range))
-                ],
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 10),
-            child: Row(
+    final keyboardSpace = MediaQuery.of(context).viewInsets.bottom;
+    return SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(16, 30, 16, keyboardSpace + 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              'New expense',
+              style: TextStyle(fontSize: 20),
+            ),
+            TextField(
+              controller: _titleController,
+              maxLength: 50,
+              decoration: InputDecoration(label: Text('Title')),
+            ),
+            Row(
               children: [
-                DropdownButton(
-                  value: _selectedCategory,
-                  alignment: Alignment.topLeft,
-                  items: Category.values
-                      .map(
-                        (item) => DropdownMenuItem(
-                          value: item,
-                          child: Text(
-                            item.name.toString().toUpperCase(),
-                          ),
-                        ),
-                      )
-                      .toList(),
-                  onChanged: (value) {
-                    if (value != null) {
-                      setState(
-                        () {
-                          _selectedCategory = value;
-                        },
-                      );
-                    }
-                  },
+                Expanded(
+                  child: TextField(
+                    controller: _amountController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                        label: Text('Amount'), prefixText: '\$'),
+                  ),
+                ),
+                SizedBox(
+                  width: 16,
+                ),
+                Row(
+                  children: [
+                    Text(_selectedDate == null
+                        ? "No Selected date"
+                        : formatter.format(_selectedDate!)),
+                    IconButton(
+                        onPressed: _presentDatePicker,
+                        icon: Icon(Icons.date_range))
+                  ],
                 ),
               ],
             ),
-          ),
-          SizedBox(height: 50),
-          Row(
-            children: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text('Cancel'),
+            Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: Row(
+                children: [
+                  DropdownButton(
+                    value: _selectedCategory,
+                    alignment: Alignment.topLeft,
+                    items: Category.values
+                        .map(
+                          (item) => DropdownMenuItem(
+                            value: item,
+                            child: Text(
+                              item.name.toString().toUpperCase(),
+                            ),
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (value) {
+                      if (value != null) {
+                        setState(
+                          () {
+                            _selectedCategory = value;
+                          },
+                        );
+                      }
+                    },
+                  ),
+                ],
               ),
-              SizedBox(width: 10),
-              ElevatedButton(
-                onPressed: _submitExpenseData,
-                child: Text('Save'),
-              ),
-            ],
-          ),
-        ],
+            ),
+            SizedBox(height: 50),
+            Row(
+              children: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text('Cancel'),
+                ),
+                SizedBox(width: 10),
+                ElevatedButton(
+                  onPressed: _submitExpenseData,
+                  child: Text('Save'),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
