@@ -36,3 +36,24 @@ class Expense {
     return '\$${amount.toStringAsFixed(2)}';
   }
 }
+
+class ExpenseBucket {
+  ExpenseBucket({required this.expenses});
+
+  Category category = Category.food;
+
+  ExpenseBucket.forCategory(List<Expense> allExpenses, this.category)
+      : expenses = allExpenses
+            .where((expense) => expense.category == category)
+            .toList();
+
+  final List<Expense> expenses;
+
+  double get totalAmount {
+    double sum = 0;
+    for (var item in expenses) {
+      sum += item.amount;
+    }
+    return sum;
+  }
+}

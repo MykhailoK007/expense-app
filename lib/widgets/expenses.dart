@@ -1,5 +1,6 @@
-import 'package:expense_tracker_app/expenses_list/expenses_list.dart';
-import 'package:expense_tracker_app/new_expenses.dart';
+import 'package:expense_tracker_app/widgets/chart/chart.dart';
+import 'package:expense_tracker_app/widgets/expenses_list/expenses_list.dart';
+import 'package:expense_tracker_app/widgets/new_expenses.dart';
 import 'package:flutter/material.dart';
 import 'package:expense_tracker_app/models/expense.dart';
 
@@ -21,7 +22,6 @@ class _ExpensesState extends State<Expenses> {
   void _openAddExpenseOverlay() {
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true,
       constraints: BoxConstraints(minWidth: double.infinity),
       builder: (ctx) => NewExpenses(onAddExpense: _addExpense),
     );
@@ -75,7 +75,9 @@ class _ExpensesState extends State<Expenses> {
         ),
         body: Column(
           children: [
-            // const Text("Expenses's chart"),
+            Chart(
+              expenses: expenses,
+            ),
             Expanded(child: mainContent)
           ],
         ));
